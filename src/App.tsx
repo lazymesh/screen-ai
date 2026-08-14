@@ -123,6 +123,53 @@ function App() {
             Screen AI
           </span>
 
+          <span>
+            <label>
+              AI Provider
+            </label>
+
+            <select
+              value={provider}
+              onChange={(event) =>
+                handleProviderChange(
+                  event.target.value as AIProvider,
+                )
+              }
+            >
+              <option value="gemini">
+                Gemini
+              </option>
+
+              <option value="openai">
+                OpenAI
+              </option>
+            </select>
+          </span>
+
+          <span>
+            <label>
+              Model
+            </label>
+
+            <select
+              value={model}
+              onChange={(event) =>
+                setModel(event.target.value)
+              }
+            >
+              {AI_MODELS[provider].map(
+                (availableModel) => (
+                  <option
+                    key={availableModel.id}
+                    value={availableModel.id}
+                  >
+                    {availableModel.name}
+                  </option>
+                ),
+              )}
+            </select>
+          </span>
+
           <span className="status">
             {capturing
               ? 'Capturing...'
@@ -131,57 +178,6 @@ function App() {
               : 'Ready'}
           </span>
         </div>
-
-        {/* Settings */}
-
-        <div className="settings">
-
-          <label>
-            AI Provider
-          </label>
-
-          <select
-            value={provider}
-            onChange={(event) =>
-              handleProviderChange(
-                event.target.value as AIProvider,
-              )
-            }
-          >
-            <option value="gemini">
-              Gemini
-            </option>
-
-            <option value="openai">
-              OpenAI
-            </option>
-          </select>
-
-          <label>
-            Model
-          </label>
-
-          <select
-            value={model}
-            onChange={(event) =>
-              setModel(event.target.value)
-            }
-          >
-            {AI_MODELS[provider].map(
-              (availableModel) => (
-                <option
-                  key={availableModel.id}
-                  value={availableModel.id}
-                >
-                  {availableModel.name}
-                </option>
-              ),
-            )}
-          </select>
-
-        </div>
-
-        {/* Answer */}
 
         <div className="center">
           {thinking ? (
