@@ -278,3 +278,43 @@ kbd {
     transform: rotate(360deg);
   }
 }
+
+.text-input-container {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  background: rgba(20, 20, 25, 0.35);
+
+  border-radius: 0 0 9px 9px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-input-container input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 10px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+
+  background: rgba(20, 20, 25, 0.8);
+  color: white;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: border-color 0.2s ease;
+}
+
+.text-input-container input:focus {
+  border-color: rgba(80, 180, 255, 0.6);
+}
+
+.text-input-container input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}

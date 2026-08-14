@@ -52,3 +52,36 @@ Focus on useful information rather than describing the screenshot.
 
   return response.text ?? 'No answer was returned.'
 }
+
+export async function analyzeTextWithGemini(
+  text: string,
+  model: string,
+) {
+  const apiKey = process.env.GEMINI_API_KEY
+
+  if (!apiKey) {
+    throw new Error(
+      'GEMINI_API_KEY is not configured. Add it to your .env file.',
+    )
+  }
+
+  const ai = new GoogleGenAI({
+    apiKey,
+  })
+
+  const response = await ai.models.generateContent({
+    model,
+    contents: [
+      {
+        role: 'user',
+        parts: [
+          {
+            text,
+          },
+        ],
+      },
+    ],
+  })
+
+  return response.text ?? 'No answer was returned.'
+}

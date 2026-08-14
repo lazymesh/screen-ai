@@ -56,8 +56,15 @@ contextBridge.exposeInMainWorld('screenAI', {
   analyze(options: {
     provider: 'gemini' | 'openai'
     model: string
-    imageBase64: string
+    imageBase64?: string
+    text?: string
   }) {
-    return ipcRenderer.invoke('analyze-screen', options)
+    if (options.imageBase64) {
+      return ipcRenderer.invoke('analyze-screen', options)
+    } else if (options.text) {
+      return ipcRenderer.invoke('analyze-text', options)
+    } else {
+      throw new Error('Either imageBase64 or text must be provided')
+    }
   },
 })

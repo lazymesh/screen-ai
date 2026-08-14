@@ -48,6 +48,7 @@ function App() {
   const [thinking, setThinking] = useState(false)
   const [answer, setAnswer] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [textInput, setTextInput] = useState('')
 
   const handleProviderChange = (
     newProvider: AIProvider,
@@ -55,6 +56,45 @@ function App() {
     setProvider(newProvider)
 
     setModel(AI_MODELS[newProvider][0].id)
+  }
+
+  const handleTextSubmit = async () => {
+    if (!textInput.trim()) return
+
+    try {
+      setError(null)
+      setAnswer(null)
+      setThinking(true)
+
+      const result =
+        await window.screenAI.analyze({
+          provider: providerRef.current,
+          model: modelRef.current,
+          text: textInput,
+        })
+
+      setAnswer(result)
+    } catch (err) {
+      console.error('Analysis failed:', err)
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Something went wrong.',
+      )
+    } finally {
+      setThinking(false)
+      setTextInput('')
+    }
+  }
+
+  const handleTextKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      handleTextSubmit()
+    }
   }
 
   useEffect(() => {
@@ -211,6 +251,18 @@ function App() {
               </>
             )}
 
+        </div>
+
+        <div className="text-input-container">
+          <input
+            type="text"
+            placeholder="Ask something..."
+            value={textInput}
+            onChange={(event) =>
+              setTextInput(event.target.value)
+            }
+            onKeyDown={handleTextKeyDown}
+          />
         </div>
 
       </div>

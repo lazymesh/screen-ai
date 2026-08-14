@@ -51,3 +51,37 @@ Focus on useful information rather than describing the screenshot.
 
   return response.output_text
 }
+
+export async function analyzeTextWithOpenAI(
+  text: string,
+  model: string,
+) {
+  const apiKey = process.env.OPENAI_API_KEY
+
+  if (!apiKey) {
+    throw new Error(
+      'OPENAI_API_KEY is not configured. Add it to your .env file.',
+    )
+  }
+
+  const client = new OpenAI({
+    apiKey,
+  })
+
+  const response = await client.responses.create({
+    model,
+    input: [
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'input_text',
+            text,
+          },
+        ],
+      },
+    ],
+  })
+
+  return response.output_text
+}

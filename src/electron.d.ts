@@ -10,7 +10,8 @@ declare global {
       analyze: (options: {
         provider: 'gemini' | 'openai'
         model: string
-        imageBase64: string
+        imageBase64?: string
+        text?: string
       }) => Promise<string>
     }
   }

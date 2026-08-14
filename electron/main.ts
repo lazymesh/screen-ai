@@ -9,7 +9,7 @@ import {
 } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { analyzeScreen } from './ai'
+import { analyzeScreen, analyzeText } from './ai'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -79,6 +79,20 @@ ipcMain.handle(
     },
   ) => {
     return analyzeScreen(options)
+  },
+)
+
+ipcMain.handle(
+  'analyze-text',
+  async (
+    _,
+    options: {
+      provider: 'gemini' | 'openai'
+      model: string
+      text: string
+    },
+  ) => {
+    return analyzeText(options)
   },
 )
 
