@@ -38,6 +38,7 @@ function App() {
 
   const providerRef = useRef(provider)
   const modelRef = useRef(model)
+  const centerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     providerRef.current = provider
@@ -94,6 +95,27 @@ function App() {
     if (event.key === 'Enter') {
       event.preventDefault()
       handleTextSubmit()
+    }
+  }
+
+  const handleCenterKeyDown = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+  ) => {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault()
+
+      if (centerRef.current) {
+        const scrollAmount = 40
+        const scrollElement =
+          centerRef.current.querySelector('.answer') ||
+          centerRef.current
+
+        if (event.key === 'ArrowUp') {
+          scrollElement.scrollTop -= scrollAmount
+        } else {
+          scrollElement.scrollTop += scrollAmount
+        }
+      }
     }
   }
 
@@ -219,7 +241,12 @@ function App() {
           </span>
         </div>
 
-        <div className="center">
+        <div
+          className="center"
+          ref={centerRef}
+          tabIndex={0}
+          onKeyDown={handleCenterKeyDown}
+        >
           {thinking ? (
               <div className="thinking">
                 <div className="spinner" />
@@ -250,7 +277,6 @@ function App() {
                 </div>
               </>
             )}
-
         </div>
 
         <div className="text-input-container">
