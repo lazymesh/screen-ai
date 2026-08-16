@@ -3,13 +3,10 @@ import OpenAI from 'openai'
 export async function analyzeWithOpenAI(
   imageBase64: string,
   model: string,
+  apiKey: string,
 ) {
-  const apiKey = process.env.OPENAI_API_KEY
-
-  if (!apiKey) {
-    throw new Error(
-      'OPENAI_API_KEY is not configured. Add it to your .env file.',
-    )
+  if (!apiKey?.trim()) {
+    throw new Error('OpenAI API key is required.')
   }
 
   const client = new OpenAI({
@@ -55,13 +52,10 @@ Focus on useful information rather than describing the screenshot.
 export async function analyzeTextWithOpenAI(
   text: string,
   model: string,
+  apiKey: string,
 ) {
-  const apiKey = process.env.OPENAI_API_KEY
-
-  if (!apiKey) {
-    throw new Error(
-      'OPENAI_API_KEY is not configured. Add it to your .env file.',
-    )
+  if (!apiKey?.trim()) {
+    throw new Error('OpenAI API key is required.')
   }
 
   const client = new OpenAI({

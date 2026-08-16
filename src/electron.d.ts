@@ -12,6 +12,7 @@ declare global {
         model: string
         imageBase64?: string
         text?: string
+        apiKey?: string
       }) => Promise<string>
     }
   }

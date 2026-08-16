@@ -76,6 +76,7 @@ ipcMain.handle(
       provider: 'gemini' | 'openai'
       model: string
       imageBase64: string
+      apiKey: string
     },
   ) => {
     return analyzeScreen(options)
@@ -90,6 +91,7 @@ ipcMain.handle(
       provider: 'gemini' | 'openai'
       model: string
       text: string
+      apiKey: string
     },
   ) => {
     return analyzeText(options)

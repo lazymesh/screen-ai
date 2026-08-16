@@ -15,6 +15,10 @@ const AI_MODELS: Record<
 > = {
   gemini: [
     {
+      id: 'gemini-2.0-flash',
+      name: 'Gemini 2.0 Flash',
+    },
+    {
       id: 'gemini-3.1-flash-lite',
       name: 'Gemini 3.1 Flash-Lite',
     },
@@ -50,6 +54,7 @@ function App() {
   const [answer, setAnswer] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [textInput, setTextInput] = useState('')
+  const [apiKey, setApiKey] = useState('')
 
   const handleProviderChange = (
     newProvider: AIProvider,
@@ -62,6 +67,13 @@ function App() {
   const handleTextSubmit = async () => {
     if (!textInput.trim()) return
 
+    const trimmedApiKey = apiKey.trim()
+
+    if (!trimmedApiKey) {
+      setError('Please enter your API key.')
+      return
+    }
+
     try {
       setError(null)
       setAnswer(null)
@@ -72,6 +84,7 @@ function App() {
           provider: providerRef.current,
           model: modelRef.current,
           text: textInput,
+          apiKey: trimmedApiKey,
         })
 
       setAnswer(result)
@@ -143,11 +156,18 @@ function App() {
           // AI processing starts
           setThinking(true)
 
+          const trimmedApiKey = apiKey.trim()
+
+          if (!trimmedApiKey) {
+            throw new Error('Please enter your API key.')
+          }
+
           const result =
             await window.screenAI.analyze({
               provider: providerRef.current,
               model: modelRef.current,
               imageBase64,
+              apiKey: trimmedApiKey,
             })
 
           setAnswer(result)
@@ -230,6 +250,25 @@ function App() {
                 ),
               )}
             </select>
+          </span>
+
+          <span>
+            <label>
+              API Key
+            </label>
+
+            <input
+              type="password"
+              value={apiKey}
+              onChange={(event) =>
+                setApiKey(event.target.value)
+              }
+              placeholder={
+                provider === 'gemini'
+                  ? 'Gemini API key'
+                  : 'OpenAI API key'
+              }
+            />
           </span>
 
           <span className="status">

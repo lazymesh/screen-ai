@@ -58,7 +58,12 @@ contextBridge.exposeInMainWorld('screenAI', {
     model: string
     imageBase64?: string
     text?: string
+    apiKey?: string
   }) {
+    if (!options.apiKey?.trim()) {
+      throw new Error('API key is required.')
+    }
+
     if (options.imageBase64) {
       return ipcRenderer.invoke('analyze-screen', options)
     } else if (options.text) {
