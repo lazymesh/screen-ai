@@ -7,7 +7,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import './App.css'
 
-type AIProvider = 'gemini' | 'openai'
+type AIProvider = 'gemini' | 'openai' | 'openrouter'
 
 const AI_MODELS: Record<
   AIProvider,
@@ -24,11 +24,11 @@ const AI_MODELS: Record<
     },
     {
       id: 'gemini-3.1-flash-lite',
-      name: 'Gemini 3.1 Flash',
+      name: 'Gemini 3.1 Flash Lite',
     },
     {
-      id: 'gemini-3.1-flash-lite',
-      name: 'Gemini 3.1 Flash-Lite',
+      id: 'gemini-2.5-pro',
+      name: 'Gemini 2.5 Pro',
     },
   ],
 
@@ -36,6 +36,21 @@ const AI_MODELS: Record<
     {
       id: 'gpt-5.4-mini',
       name: 'GPT-5.4 mini',
+    },
+  ],
+
+  openrouter: [
+    {
+      id: 'openai/gpt-4o-mini',
+      name: 'OpenRouter GPT-4o Mini',
+    },
+    {
+      id: 'google/gemini-2.0-flash-001',
+      name: 'OpenRouter Gemini 2.0 Flash',
+    },
+    {
+      id: 'anthropic/claude-3.5-sonnet',
+      name: 'OpenRouter Claude 3.5 Sonnet',
     },
   ],
 }
@@ -247,6 +262,10 @@ function App() {
               <option value="openai">
                 OpenAI
               </option>
+
+              <option value="openrouter">
+                OpenRouter
+              </option>
             </select>
           </span>
 
@@ -288,7 +307,9 @@ function App() {
               placeholder={
                 provider === 'gemini'
                   ? 'Gemini API key'
-                  : 'OpenAI API key'
+                  : provider === 'openai'
+                  ? 'OpenAI API key'
+                  : 'OpenRouter API key'
               }
             />
           </span>

@@ -73,7 +73,7 @@ ipcMain.handle(
   async (
     _,
     options: {
-      provider: 'gemini' | 'openai'
+      provider: 'gemini' | 'openai' | 'openrouter'
       model: string
       imageBase64: string
       apiKey: string
@@ -88,7 +88,7 @@ ipcMain.handle(
   async (
     _,
     options: {
-      provider: 'gemini' | 'openai'
+      provider: 'gemini' | 'openai' | 'openrouter'
       model: string
       text: string
       apiKey: string

@@ -62,7 +62,7 @@ contextBridge.exposeInMainWorld('screenAI', {
   },
 
   analyze(options: {
-    provider: 'gemini' | 'openai'
+    provider: 'gemini' | 'openai' | 'openrouter'
     model: string
     imageBase64?: string
     text?: string

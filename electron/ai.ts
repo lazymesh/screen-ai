@@ -1,7 +1,11 @@
 import { analyzeWithGemini, analyzeTextWithGemini } from './providers/gemini'
 import { analyzeWithOpenAI, analyzeTextWithOpenAI } from './providers/openai'
+import {
+  analyzeWithOpenRouter,
+  analyzeTextWithOpenRouter,
+} from './providers/openrouter'
 
-export type AIProvider = 'gemini' | 'openai'
+export type AIProvider = 'gemini' | 'openai' | 'openrouter'
 
 export interface AnalyzeScreenOptions {
   provider: AIProvider
@@ -30,6 +34,9 @@ export async function analyzeScreen({
     case 'openai':
       return analyzeWithOpenAI(imageBase64, model, apiKey)
 
+    case 'openrouter':
+      return analyzeWithOpenRouter(imageBase64, model, apiKey)
+
     default:
       throw new Error(`Unsupported AI provider: ${provider}`)
   }
@@ -47,6 +54,9 @@ export async function analyzeText({
 
     case 'openai':
       return analyzeTextWithOpenAI(text, model, apiKey)
+
+    case 'openrouter':
+      return analyzeTextWithOpenRouter(text, model, apiKey)
 
     default:
       throw new Error(`Unsupported AI provider: ${provider}`)
