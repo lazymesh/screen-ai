@@ -15,8 +15,16 @@ const AI_MODELS: Record<
 > = {
   gemini: [
     {
-      id: 'gemini-2.0-flash',
-      name: 'Gemini 2.0 Flash',
+      id: 'gemini-3-flash-preview',
+      name: 'Gemini 3 Flash Preview',
+    },
+    {
+      id: 'gemini-3.5-flash',
+      name: 'Gemini 3.5 Flash',
+    },
+    {
+      id: 'gemini-3.1-flash-lite',
+      name: 'Gemini 3.1 Flash',
     },
     {
       id: 'gemini-3.1-flash-lite',
@@ -40,8 +48,16 @@ function App() {
     AI_MODELS.gemini[0].id,
   )
 
+  const [capturing, setCapturing] = useState(false)
+  const [thinking, setThinking] = useState(false)
+  const [answer, setAnswer] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [textInput, setTextInput] = useState('')
+  const [apiKey, setApiKey] = useState('')
+
   const providerRef = useRef(provider)
   const modelRef = useRef(model)
+  const apiKeyRef = useRef(apiKey)
   const centerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -49,12 +65,9 @@ function App() {
     modelRef.current = model
   }, [provider, model])
 
-  const [capturing, setCapturing] = useState(false)
-  const [thinking, setThinking] = useState(false)
-  const [answer, setAnswer] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [textInput, setTextInput] = useState('')
-  const [apiKey, setApiKey] = useState('')
+  useEffect(() => {
+    apiKeyRef.current = apiKey
+  }, [apiKey])
 
   const handleProviderChange = (
     newProvider: AIProvider,
@@ -64,10 +77,18 @@ function App() {
     setModel(AI_MODELS[newProvider][0].id)
   }
 
+  const normalizeForIPC = (value: string) =>
+    value
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2013\u2014]/g, '-')
+      .replace(/[\u2026]/g, '...')
+      .replace(/[\u00A0]/g, ' ')
+
   const handleTextSubmit = async () => {
     if (!textInput.trim()) return
 
-    const trimmedApiKey = apiKey.trim()
+    const trimmedApiKey = normalizeForIPC(apiKey.trim())
 
     if (!trimmedApiKey) {
       setError('Please enter your API key.')
@@ -83,7 +104,7 @@ function App() {
         await window.screenAI.analyze({
           provider: providerRef.current,
           model: modelRef.current,
-          text: textInput,
+          text: normalizeForIPC(textInput),
           apiKey: trimmedApiKey,
         })
 
@@ -156,7 +177,8 @@ function App() {
           // AI processing starts
           setThinking(true)
 
-          const trimmedApiKey = apiKey.trim()
+          const trimmedApiKey =
+            normalizeForIPC(apiKeyRef.current.trim())
 
           if (!trimmedApiKey) {
             throw new Error('Please enter your API key.')
